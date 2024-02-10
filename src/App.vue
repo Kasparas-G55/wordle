@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center">
-    <h1>Worlde</h1>
+    <h1>Wordle</h1>
     <Board />
     <Keyboard />
   </div>
