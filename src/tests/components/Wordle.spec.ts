@@ -3,13 +3,14 @@ import { mount } from "@vue/test-utils";
 import Wordle from "@/components/Wordle.vue";
 import { it, expect, describe, beforeEach } from "vitest";
 import { WORD_SIZE } from "@/settings";
+import { ref, computed } from "vue";
 
 describe("wordle app", () => {
   const wordOfTheDay = "TESTS";
   let wrapper: ReturnType<typeof mount<typeof Wordle>>;
 
   beforeEach(() => {
-    wrapper = mount(Wordle, { props: { wordOfTheDay, attempts: 0, guesses: [] } });
+    wrapper = mount(Wordle, { props: { wordOfTheDay, guesses: [] } });
   });
 
   describe("player input", () => {
@@ -49,15 +50,14 @@ describe("wordle app", () => {
       expect(input.element.value.length).toEqual(5);
     });
 
-    it("should store guess in array when submitting a guess", async () => {
+    it("should push guess to array when submitting a wrong guess", async () => {
       await input.setValue("WORDS");
       await input.trigger("keypress", { key: "Enter" });
 
       const props = wrapper.props();
 
       expect(props.guesses).toContain("WORDS");
-      expect(props.attempts).toEqual(1);
-      expect(props.guesses.length).toEqual(2);
+      expect(props.guesses.length).toEqual(1);
     });
   });
 });

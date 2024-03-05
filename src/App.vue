@@ -1,5 +1,7 @@
 <template>
   <div class="flex flex-col items-center">
+    <p>Attempts: {{ attempts }}</p>
+    <p>Guesses: {{ guesses }}</p>
     <Wordle
       :word-of-the-day="wordOfTheDay"
       :guesses
@@ -13,7 +15,7 @@
 import Wordle from "./components/Wordle.vue";
 import { ref, computed } from "vue";
 
-const wordOfTheDay = ref("");
+const wordOfTheDay = "TESTS";
 const guesses = ref<string[]>([]);
 const attempts = computed(() => guesses.value.length);
 
