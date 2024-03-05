@@ -1,20 +1,16 @@
 <template>
-  <div
-    class="font-bold px-3 py-5 capitalize"
-    :class="keys[code] ? 'bg-red-300' : 'bg-gray-300'"
+  <button
+    class="bg-gray-300 font-bold px-3 py-5 capitalize select-none"
+    type="button"
   >
-    {{ code }}
-  </div>
+    {{ letter }}
+  </button>
 </template>
 
 <script setup lang="ts">
 
-import { useMagicKeys } from "@vueuse/core";
-
-const keys = useMagicKeys({ reactive: true });
-
 defineProps({
-  code: {
+  letter: {
     type: String,
     required: true,
   },

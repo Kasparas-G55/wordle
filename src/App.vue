@@ -1,12 +1,20 @@
 <template>
   <div class="flex flex-col items-center">
-    <h1>Wordle</h1>
-    <Board />
-    <Keyboard />
+    <Wordle
+      :word-of-the-day="wordOfTheDay"
+      :guesses
+      :attempts
+      @submit="attempts++"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import Board from "./components/Board.vue";
-import Keyboard from "./components/Keyboard.vue";
+import Wordle from "./components/Wordle.vue";
+import { ref, computed } from "vue";
+
+const wordOfTheDay = ref("");
+const guesses = ref<string[]>([]);
+const attempts = computed(() => guesses.value.length);
+
 </script>
