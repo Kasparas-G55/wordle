@@ -3,10 +3,8 @@
     <BoardLetter
       v-for="(num, i) of WORD_SIZE"
       :key="`letter-${num}`"
-      :data-letter="guess[i]"
-      :guess
     >
-      {{ guess[i] }}
+      {{ guess ? guess[i] : '' }}
     </BoardLetter>
   </div>
 </template>
@@ -18,7 +16,7 @@ import BoardLetter from "./BoardLetter.vue";
 defineProps({
   guess: {
     type: String,
-    required: true,
+    default: undefined,
   }
 });
 </script>

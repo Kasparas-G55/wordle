@@ -1,21 +1,24 @@
 
 <template>
   <div class="flex flex-col gap-2">
+    {{ guesses }}
     <BoardRow
-      v-for="row, of 6"
+      v-for="(row, i) of 6"
       :key="row"
-      :guess
+      :data-test="guesses[i]"
+      :guess="guesses[i]"
     />
   </div>
 </template>
 
 <script setup lang="ts">
+import type { PropType } from "vue";
 import BoardRow from "./BoardRow.vue";
 
 defineProps({
-  guess: {
-    type: String,
+  guesses: {
+    type: Array as PropType<string[]>,
     required: true,
-  }
+  },
 });
 </script>

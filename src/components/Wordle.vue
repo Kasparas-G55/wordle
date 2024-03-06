@@ -1,10 +1,10 @@
 <template>
   <h1>Wordle</h1>
-  <Board :guess />
+  <Board :guesses />
   <!-- class="absolute opacity-0" -->
   <input
     ref="input"
-    v-model="guess"
+    v-model="guesses[attempts]"
     test-id="input"
     :maxlength="WORD_SIZE"
     type="text"
@@ -18,31 +18,24 @@
 <script setup lang="ts">
 import Board from "@/components/Board.vue";
 import Keyboard from "@/components/Keyboard.vue";
-import { WORD_SIZE } from "@/settings";
-import { toRef, onMounted, ref, type PropType } from "vue";
+import { DEFEAT_MESSAGE, VICTORY_MESSAGE, WORD_SIZE } from "@/settings";
+import { computed, onMounted, ref } from "vue";
 
 const props = defineProps({
   wordOfTheDay: {
     type: String,
     required: true,
   },
-  guesses: {
-    type: Array as PropType<string[]>,
-    required: true,
-  },
-  attempts: {
-    type: Number,
-    default: 0,
-  }
 });
 
 const emit = defineEmits<{
   submit: [],
 }>();
 
-const guessesRef = toRef(props.guesses);
+const guesses = ref<string[]>([""]);
+const attempts = ref(0);
+const guess = computed<string>(() => guesses.value[attempts.value].toUpperCase());
 const input = ref<HTMLInputElement>();
-const guess = ref("");
 
 onMounted(() => {
   // This is needed, because Vue Test Utils doesn't acknowledge 'autofocus' on the input element.
@@ -53,7 +46,7 @@ function onKeyPress(letter: string) {
   if (guess.value.length >= WORD_SIZE)
     return;
 
-  guess.value += letter;
+  guesses.value[attempts.value] += letter;
 }
 
 function onInputBlur(event: Event) {
@@ -66,10 +59,21 @@ function onInputSumbit() {
   if (guess.value.length < 5)
     return;
 
-  if (props.attempts >= 6)
+  if (guess.value === props.wordOfTheDay) {
+    console.log(VICTORY_MESSAGE);
+    input.value!.disabled = true;
     return;
+  }
 
-  guessesRef.value.push(guess.value);
+  if (attempts.value >= 5) {
+    console.log(DEFEAT_MESSAGE);
+    attempts.value++;
+    input.value!.disabled = true;
+    return;
+  }
+
+  guesses.value.push("");
+  attempts.value++;
 }
 
 </script>
