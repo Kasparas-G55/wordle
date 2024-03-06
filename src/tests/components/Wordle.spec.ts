@@ -10,7 +10,9 @@ describe("wordle app", () => {
   let wrapper: ReturnType<typeof mount<typeof Wordle>>;
 
   beforeEach(() => {
-    wrapper = mount(Wordle, { props: { wordOfTheDay, guesses: [] } });
+    wrapper = mount(Wordle, {
+      props: { wordOfTheDay },
+    });
   });
 
   describe("player input", () => {
@@ -25,7 +27,7 @@ describe("wordle app", () => {
     it("should remain in focus", async () => {
       document.body.innerHTML = "<div id='app'></div>";
       wrapper = mount(Wordle, {
-        props: { wordOfTheDay, attempts: 0, guesses: [] },
+        props: { wordOfTheDay, guesses: [] },
         attachTo: "#app"
       });
 
@@ -50,14 +52,13 @@ describe("wordle app", () => {
       expect(input.element.value.length).toEqual(5);
     });
 
-    it("should push guess to array when submitting a wrong guess", async () => {
+    it("renders guess on the board", async () => {
       await input.setValue("WORDS");
+      expect(wrapper.findAll("[data-test='WORDS']")).toHaveLength(1);
+
       await input.trigger("keypress", { key: "Enter" });
-
-      const props = wrapper.props();
-
-      expect(props.guesses).toContain("WORDS");
-      expect(props.guesses.length).toEqual(1);
+      await input.setValue("WORDS");
+      expect(wrapper.findAll("[data-test='WORDS']")).toHaveLength(2);
     });
   });
 });
