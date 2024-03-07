@@ -1,5 +1,7 @@
 <template>
-  <h1>Wordle</h1>
+  <h1 class="text-4xl font-bold">
+    Wordle
+  </h1>
   <Board :guesses />
   <!-- class="absolute opacity-0" -->
   <input
