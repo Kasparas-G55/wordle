@@ -43,6 +43,14 @@ onMounted(() => {
 });
 
 function onKeyPress(letter: string) {
+  if (letter === "Enter")
+    return onInputSumbit();
+
+  if (letter === "Backspace") {
+    guesses.value[attempts.value] = guesses.value[attempts.value].slice(0, -1);
+    return;
+  }
+
   if (guess.value.length >= WORD_SIZE)
     return;
 
