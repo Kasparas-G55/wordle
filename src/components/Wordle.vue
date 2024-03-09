@@ -3,11 +3,11 @@
     Wordle
   </h1>
   <Board :guesses />
-  <!-- class="absolute opacity-0" -->
   <input
     ref="input"
     v-model="guesses[attempts]"
-    test-id="input"
+    class="absolute opacity-0"
+    data-test="input"
     :maxlength="WORD_SIZE"
     type="text"
     autofocus
@@ -15,10 +15,24 @@
     @keypress.enter="onInputSumbit"
   />
   <Keyboard @key-press="onKeyPress" />
+  <Teleport to="#app">
+    <Dialog v-show="gameState !== undefined && (gameState || !gameState)">
+      <DialogContent>
+        <h1 v-if="gameState">
+          {{ VICTORY_MESSAGE }}
+        </h1>
+        <h1 v-else>
+          {{ DEFEAT_MESSAGE }}
+        </h1>
+      </DialogContent>
+    </Dialog>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
 import Board from "@/components/Board.vue";
+import Dialog from "@/components/Dialog.vue";
+import DialogContent from "@/components/DialogContent.vue";
 import Keyboard from "@/components/Keyboard.vue";
 import { DEFEAT_MESSAGE, VICTORY_MESSAGE, WORD_SIZE } from "@/settings";
 import { computed, onMounted, ref } from "vue";
@@ -39,6 +53,7 @@ const attempts = ref(0);
 const guess = computed<string>(() =>
   guesses.value[attempts.value].toUpperCase(),
 );
+const gameState = ref<boolean>();
 const input = ref<HTMLInputElement>();
 
 onMounted(() => {
@@ -47,7 +62,8 @@ onMounted(() => {
 });
 
 function onKeyPress(letter: string) {
-  if (letter === "Enter") return onInputSumbit();
+  if (letter === "Enter")
+    return onInputSumbit();
 
   if (letter === "Backspace") {
     guesses.value[attempts.value] = guesses.value[attempts.value].slice(0, -1);
@@ -69,13 +85,13 @@ function onInputSumbit() {
   if (guess.value.length < 5) return;
 
   if (guess.value === props.wordOfTheDay) {
-    console.log(VICTORY_MESSAGE);
+    gameState.value = true;
     input.value!.disabled = true;
     return;
   }
 
   if (attempts.value >= 5) {
-    console.log(DEFEAT_MESSAGE);
+    gameState.value = false;
     attempts.value++;
     input.value!.disabled = true;
     return;
