@@ -10,10 +10,15 @@
       <KeyboardKey
         v-for="key of row"
         :key="key"
-        :test-id="key"
+        :data-test="key"
         :letter="key"
         @click="emit('keyPress', key)"
-      />
+      >
+        <Backspace v-if="key === 'Backspace'" />
+        <template v-else>
+          {{ key.toUpperCase() }}
+        </template>
+      </KeyboardKey>
     </KeyboardRow>
   </div>
 </template>
@@ -21,6 +26,7 @@
 <script setup lang="ts">
 import KeyboardRow from "./KeyboardRow.vue";
 import KeyboardKey from "./KeyboardKey.vue";
+import Backspace from "./Backspace.vue";
 
 const keyRows = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
