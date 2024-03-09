@@ -1,6 +1,5 @@
 <template>
-  <div class="flex flex-col gap-2">
-    {{ guesses }}
+  <div class="flex flex-col gap-2 pb-4">
     <BoardRow
       v-for="(row, i) of 6"
       :key="row"
