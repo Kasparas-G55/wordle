@@ -10,8 +10,10 @@ describe("wordle app", () => {
   let wrapper: ReturnType<typeof mount<typeof Wordle>>;
 
   beforeEach(() => {
+    document.body.innerHTML = "<div id='app'></div>";
     wrapper = mount(Wordle, {
       props: { wordOfTheDay },
+      attachTo: "#app"
     });
   });
 
@@ -20,17 +22,11 @@ describe("wordle app", () => {
     let button: DOMWrapper<HTMLButtonElement>;
 
     beforeEach(() => {
-      input = wrapper.find<HTMLInputElement>("[test-id='input']");
-      button = wrapper.find<HTMLButtonElement>("[test-id='a']");
+      input = wrapper.find<HTMLInputElement>("[data-test='input']");
+      button = wrapper.find<HTMLButtonElement>("[data-test='a']");
     });
 
     it("should remain in focus", async () => {
-      document.body.innerHTML = "<div id='app'></div>";
-      wrapper = mount(Wordle, {
-        props: { wordOfTheDay, guesses: [] },
-        attachTo: "#app",
-      });
-
       expect(input.attributes("autofocus")).not.toBeUndefined();
 
       await input.trigger("blur");
