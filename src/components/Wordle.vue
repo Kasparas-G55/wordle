@@ -13,7 +13,7 @@
     autofocus
     @blur="onInputBlur"
     @keypress.enter="onInputSumbit"
-  >
+  />
   <Keyboard @key-press="onKeyPress" />
 </template>
 
@@ -31,12 +31,14 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  submit: [],
+  submit: [];
 }>();
 
 const guesses = ref<string[]>([""]);
 const attempts = ref(0);
-const guess = computed<string>(() => guesses.value[attempts.value].toUpperCase());
+const guess = computed<string>(() =>
+  guesses.value[attempts.value].toUpperCase(),
+);
 const input = ref<HTMLInputElement>();
 
 onMounted(() => {
@@ -45,16 +47,14 @@ onMounted(() => {
 });
 
 function onKeyPress(letter: string) {
-  if (letter === "Enter")
-    return onInputSumbit();
+  if (letter === "Enter") return onInputSumbit();
 
   if (letter === "Backspace") {
     guesses.value[attempts.value] = guesses.value[attempts.value].slice(0, -1);
     return;
   }
 
-  if (guess.value.length >= WORD_SIZE)
-    return;
+  if (guess.value.length >= WORD_SIZE) return;
 
   guesses.value[attempts.value] += letter;
 }
@@ -66,8 +66,7 @@ function onInputBlur(event: Event) {
 }
 
 function onInputSumbit() {
-  if (guess.value.length < 5)
-    return;
+  if (guess.value.length < 5) return;
 
   if (guess.value === props.wordOfTheDay) {
     console.log(VICTORY_MESSAGE);
@@ -85,5 +84,4 @@ function onInputSumbit() {
   guesses.value.push("");
   attempts.value++;
 }
-
 </script>

@@ -6,8 +6,8 @@ export default defineConfig({
     presetUno(),
     presetWebFonts({
       fonts: {
-        serif: "Lora"
-      }
-    })
+        serif: "Lora",
+      },
+    }),
   ],
 });

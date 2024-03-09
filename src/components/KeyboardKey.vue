@@ -1,11 +1,10 @@
 <template>
   <button
-    class="bg-gray-900 rounded-xl border-none p-0 cursor-pointer outline-offset-4"
+    class="p-0 bg-gray-900 border-none cursor-pointer rounded-xl outline-offset-4"
     type="button"
   >
     <span
-      class="block py-3 px-8 font-semibold
-    bg-gray-700 rounded-xl text-xl text-white transition-transform i -translate-y-1.5 active:-translate-y-0.5"
+      class="block -translate-y-1.5 rounded-xl bg-gray-700 px-8 py-3 text-xl font-semibold text-white transition-transform active:-translate-y-0.5"
     >
       {{ letter.toUpperCase() }}
     </span>
@@ -13,12 +12,10 @@
 </template>
 
 <script setup lang="ts">
-
 defineProps({
   letter: {
     type: String,
     required: true,
   },
 });
-
 </script>

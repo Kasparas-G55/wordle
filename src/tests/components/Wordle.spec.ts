@@ -28,7 +28,7 @@ describe("wordle app", () => {
       document.body.innerHTML = "<div id='app'></div>";
       wrapper = mount(Wordle, {
         props: { wordOfTheDay, guesses: [] },
-        attachTo: "#app"
+        attachTo: "#app",
       });
 
       expect(input.attributes("autofocus")).not.toBeUndefined();

@@ -25,11 +25,10 @@ import KeyboardKey from "./KeyboardKey.vue";
 const keyRows = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
   ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-  ["Enter", "z", "x", "c", "v", "b", "n", "m", "Backspace"]
+  ["Enter", "z", "x", "c", "v", "b", "n", "m", "Backspace"],
 ] as const;
 
 const emit = defineEmits<{
-  keyPress: [key: string]
+  keyPress: [key: string];
 }>();
-
 </script>

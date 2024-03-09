@@ -4,7 +4,7 @@
       v-for="(num, i) of WORD_SIZE"
       :key="`letter-${num}`"
     >
-      {{ guess ? guess[i] : '' }}
+      {{ guess ? guess[i] : "" }}
     </BoardLetter>
   </div>
 </template>
@@ -17,6 +17,6 @@ defineProps({
   guess: {
     type: String,
     default: undefined,
-  }
+  },
 });
 </script>
