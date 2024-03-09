@@ -2,17 +2,14 @@ import type { DOMWrapper } from "@vue/test-utils";
 import { mount } from "@vue/test-utils";
 import Wordle from "@/components/Wordle.vue";
 import { it, expect, describe, beforeEach } from "vitest";
-import { WORD_SIZE } from "@/settings";
-import { ref, computed } from "vue";
+import { GUESS_WORD, WORD_SIZE } from "@/settings";
 
 describe("wordle app", () => {
-  const wordOfTheDay = "TESTS";
   let wrapper: ReturnType<typeof mount<typeof Wordle>>;
 
   beforeEach(() => {
     document.body.innerHTML = "<div id='app'></div>";
     wrapper = mount(Wordle, {
-      props: { wordOfTheDay },
       attachTo: "#app"
     });
   });
@@ -42,19 +39,19 @@ describe("wordle app", () => {
     it(`should not add letter if input contains greater or equal than ${WORD_SIZE} letters`, async () => {
       expect(input.attributes("maxlength")).toBeCloseTo(WORD_SIZE);
 
-      await input.setValue(wordOfTheDay);
+      await input.setValue(GUESS_WORD);
       await button.trigger("click");
 
       expect(input.element.value.length).toEqual(5);
     });
 
     it("renders guess on the board", async () => {
-      await input.setValue("WORDS");
-      expect(wrapper.findAll("[data-test='WORDS']")).toHaveLength(1);
+      await input.setValue("words");
+      expect(wrapper.findAll("[data-test='words']")).toHaveLength(1);
 
       await input.trigger("keypress", { key: "Enter" });
-      await input.setValue("WORDS");
-      expect(wrapper.findAll("[data-test='WORDS']")).toHaveLength(2);
+      await input.setValue("words");
+      expect(wrapper.findAll("[data-test='words']")).toHaveLength(2);
     });
   });
 });

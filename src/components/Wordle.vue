@@ -2,10 +2,13 @@
   <h1 class="text-4xl font-bold">
     Wordle
   </h1>
-  <Board :guesses />
+  <Board
+    :guesses
+    :attempts
+  />
   <input
     ref="input"
-    v-model="guesses[attempts]"
+    v-model="guess"
     class="absolute opacity-0"
     data-test="input"
     :maxlength="WORD_SIZE"
@@ -13,9 +16,11 @@
     autofocus
     @blur="onInputBlur"
     @keypress.enter="onInputSumbit"
+    @keydown.space.prevent
   />
   <Keyboard @key-press="onKeyPress" />
   <Teleport to="#app">
+    <Sonner position="bottom-center" />
     <Dialog v-show="gameState !== undefined && (gameState || !gameState)">
       <DialogContent>
         <h1 v-if="gameState">
@@ -30,29 +35,27 @@
 </template>
 
 <script setup lang="ts">
+import words from "@/words.json";
 import Board from "@/components/Board.vue";
 import Dialog from "@/components/Dialog.vue";
 import DialogContent from "@/components/DialogContent.vue";
 import Keyboard from "@/components/Keyboard.vue";
-import { DEFEAT_MESSAGE, VICTORY_MESSAGE, WORD_SIZE } from "@/settings";
-import { computed, onMounted, ref } from "vue";
-
-const props = defineProps({
-  wordOfTheDay: {
-    type: String,
-    required: true,
-  },
-});
+import { DEFEAT_MESSAGE, VICTORY_MESSAGE, GUESS_WORD, WORD_SIZE } from "@/settings";
+import { onMounted, ref } from "vue";
+import { toast } from "vue-sonner";
+import Sonner from "./Sonner.vue";
 
 const emit = defineEmits<{
   submit: [];
 }>();
 
+const [guess] = defineModel<string>({
+  get: () => guesses.value[attempts.value],
+  set: (value) => guesses.value[attempts.value] = value.toLowerCase(),
+  default: ""
+});
 const guesses = ref<string[]>([""]);
 const attempts = ref(0);
-const guess = computed<string>(() =>
-  guesses.value[attempts.value].toUpperCase(),
-);
 const gameState = ref<boolean>();
 const input = ref<HTMLInputElement>();
 
@@ -70,9 +73,10 @@ function onKeyPress(letter: string) {
     return;
   }
 
-  if (guess.value.length >= WORD_SIZE) return;
+  if (guess.value.length >= WORD_SIZE)
+    return;
 
-  guesses.value[attempts.value] += letter;
+  guesses.value[attempts.value] += letter.toLowerCase();
 }
 
 function onInputBlur(event: Event) {
@@ -82,9 +86,15 @@ function onInputBlur(event: Event) {
 }
 
 function onInputSumbit() {
-  if (guess.value.length < 5) return;
+  if (guess.value.length < 5)
+    return;
 
-  if (guess.value === props.wordOfTheDay) {
+  if (!words.includes(guess.value)) {
+    toast("Word not in the list.");
+    return;
+  }
+
+  if (guess.value === GUESS_WORD) {
     gameState.value = true;
     input.value!.disabled = true;
     return;
